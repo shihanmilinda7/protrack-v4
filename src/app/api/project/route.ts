@@ -33,7 +33,7 @@ export async function GET(request: Request) {
           },
         },
       });
-  
+
       project = await tx.projects.findMany({
         where: {
           projectname: {
@@ -55,37 +55,5 @@ export async function GET(request: Request) {
     res = { message: "FAIL" };
   }
 
-  // if (searchProjectName != "-1") {
-  //   totalProjectCount = await prisma.projects.count({
-  //     where: {
-  //       projectname: {
-  //         contains: searchProjectName,
-  //       },
-  //     },
-  //   });
-
-  //   project = await prisma.projects.findMany({
-  //     where: {
-  //       projectname: {
-  //         contains: searchProjectName,
-  //       },
-  //     },
-  //     skip: offset,
-  //     take: postsPerPage,
-  //   });
-  // } else {
-  //   totalProjectCount = await prisma.projects.count();
-
-  //   project = await prisma.projects.findMany({
-  //     skip: offset,
-  //     take: postsPerPage,
-  //   });
-  // }
-
-  // if (project.length > 0) {
-  //   res = { message: "SUCCESS", project, totalProjectCount };
-  // } else {
-  //   res = { message: "FAIL", project: [], totalProjectCount: 1 };
-  // }
   return NextResponse.json(res);
 }

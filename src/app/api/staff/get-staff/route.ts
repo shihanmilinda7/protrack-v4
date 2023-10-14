@@ -1,9 +1,6 @@
-import { StaffObj } from "@/app/components/staff/types";
 import { prisma } from "@/db";
 import { Prisma } from "@prisma/client";
-import { DefaultArgs } from "@prisma/client/runtime/library";
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -23,10 +20,6 @@ export async function GET(request: Request) {
   let searchStaffName: any;
   let searchDesignation: any;
 
-  // console.log("tmpSearchStaffName", searchParams);
-  // console.log("tmpSearchDesignation", tmpSearchDesignation);
-
-  // console.log("tmpPageNumber", tmpPageNumber);
   try {
     if (tmpSearchStaffName == "-1") {
       searchStaffName = "";
@@ -89,38 +82,5 @@ export async function GET(request: Request) {
     res = { message: "FAIL" };
   }
 
-  // if (searchStaffName) {
-  //   console.log("searchStaffName", searchStaffName);
-  //   totalStaffCount = await prisma.staff.count({
-  //     where: {
-  //       staffname: {
-  //         contains: searchStaffName,
-  //       },
-  //     },
-  //   });
-
-  //   staff = await prisma.staff.findMany({
-  //     where: {
-  //       staffname: {
-  //         contains: "",
-  //       },
-  //     },
-  //     skip: offset,
-  //     take: postsPerPage,
-  //   });
-  // } else {
-  //   totalStaffCount = await prisma.staff.count();
-
-  //   staff = await prisma.staff.findMany({
-  //     skip: offset,
-  //     take: postsPerPage,
-  //   });
-  // }
-
-  // if (staff.length > 0) {
-  //   res = { message: "SUCCESS", staff, totalStaffCount };
-  // } else {
-  //   res = { message: "FAIL" };
-  // }
   return NextResponse.json(res);
 }
