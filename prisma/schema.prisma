@@ -1,0 +1,147 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model users{
+  userid       Int      @id @default(autoincrement())
+  staffid Int 
+  username String   
+  password String
+  role String @default("user")
+  country String @default("LK")
+  createdAt DateTime @default(now())
+}
+
+model staff{
+  staffid       Int      @id @default(autoincrement())
+  staffname String   
+  contracttype String   
+  contactno    String   
+  nic String
+  designation String @default("user")
+  country String @default("LK")
+  createdAt DateTime @default(now())
+}
+
+model projects{
+  projectid       Int      @id @default(autoincrement())
+  projectname String   
+  projectdescription String   
+  startdate String   
+  enddate String   
+  projectstatus String   
+}
+
+model projecttasks{
+  taskid       Int      @id @default(autoincrement())
+  projectid Int   
+  taskname String   
+  taskdescription String   
+  startdate String   
+  enddate String   
+}
+
+model projectassigns{
+  projectassignid       Int      @id @default(autoincrement())
+  projectid Int   
+  staffid Int
+}
+
+model projecttasksassigns{
+  projecttaskassignid       Int      @id @default(autoincrement())
+  projectid Int   
+  staffid Int
+  taskid Int
+}
+
+model timelogs{
+  timelogid       Int      @id @default(autoincrement())
+  date String   
+  staffid Int 
+  workingType String  
+  remark String  
+}
+
+model timelogsdetails{
+  timelogdetailid       Int      @id @default(autoincrement())
+  timelogid Int
+  projectid Int
+  taskid Int
+  time Int
+  rowindex Int    
+  remark String  
+}
+
+model timealloc{
+  timeallocid       Int      @id @default(autoincrement())
+  date String   
+  staffid Int 
+  projectid Int 
+  remark    String  
+}
+
+model timeallocdetails{
+  timeallocdetailid       Int      @id @default(autoincrement())
+  timeallocid Int
+  taskid Int
+  projecttaskassignid Int
+  time Int   
+  remark    String  
+}
+
+model calanderheaderdata{
+  calanderid       Int      @id @default(autoincrement())
+  year String
+  country String
+}
+
+model calanderdatasourcedata{
+  calanderdatasourceid       Int      @id @default(autoincrement())
+  calanderid String
+  name String
+  location String
+  startDate String
+  endDate String
+  color String
+  uniqueKey String
+  dateType String @default("Poya Day")
+}
+
+model categories{
+  categoryid       Int      @id @default(autoincrement())
+  categoryname String   
+}
+
+model categorydetails{
+  categorydetailid       Int      @id @default(autoincrement())
+  categoryid       Int
+  categorydetailname String   
+}
+
+model tasks{
+  taskid       Int      @id @default(autoincrement())
+  staffid       Int
+  clientname String   
+  categoryid Int
+  location String
+  visitcount Int
+  status String
+}
+
+model taskphotos{
+  taskphotoid       Int      @id @default(autoincrement())
+  taskid Int
+  categoryid Int
+  categorydetailid Int
+  photodataurl String
+  createdAt DateTime @default(now())
+}
+

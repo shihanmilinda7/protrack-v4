@@ -1,0 +1,34 @@
+.my-selected:not([disabled]) {
+  font-weight: bold;
+  border: 2px solid currentColor;
+  background-color: #5a67d8;
+  color: rgb(255, 255, 255);
+}
+.my-selected:hover:not([disabled]) {
+  border-color: blue;
+  color: blue;
+}
+.my-today {
+  font-weight: bold;
+  font-size: 140%;
+  color: rgb(0, 0, 0);
+}
+
+.complteddates {
+  background-color: #03f0fc;
+  color: rgb(0, 0, 0);
+}
+.custom-color-A {
+  background-color: #ff0000; /* Set custom color A */
+  color: #ffffff; /* Set the text color for custom color A */
+}
+
+.custom-color-B {
+  background-color: #00ff00; /* Set custom color B */
+  color: #000000; /* Set the text color for custom color B */
+}
+
+.custom-color-C {
+  background-color: #0000ff; /* Set custom color C */
+  color: #ffffff; /* Set the text color for custom color C */
+}
