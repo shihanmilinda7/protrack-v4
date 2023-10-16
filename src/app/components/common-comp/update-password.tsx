@@ -9,6 +9,9 @@ import ConfirmAlertbox from "./confirm-alertbox";
 import { inputFieldValidation } from "@/app/utils/utils";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
+import NextAutoFocusTextInputField from "./nextui-input-fields/next-autofocus-text-input-fields";
+import NextTextInputField from "./nextui-input-fields/next-text-input-fields";
+import { Button } from "@nextui-org/react";
 
 const UpdatePassword = () => {
   //get pathname
@@ -144,11 +147,32 @@ const UpdatePassword = () => {
         <div className="pl-8 pb-1">
           <h1 className="text-xl text-blue-800">Setting</h1>
         </div>
-        <div className="flex items-center justify-center pl-12 pr-12">
+        <div className="flex items-center justify-center pl-8 pr-8">
           <div className="mx-auto w-full max-w-[550px]">
             <div className="-mx-3 flex flex-wrap">
-              <div className="w-full px-3">
-                <TextInputField
+              <div className="w-full px-3 flex flex-col gap-3">
+                <div className="w-full sm:w-1/1">
+                  <NextAutoFocusTextInputField
+                    label="Old Password"
+                    value={oldpassword}
+                    onChange={(e) => setOldpassword(e.target.value)}
+                  />
+                </div>
+                <div className="w-full sm:w-1/1">
+                  <NextTextInputField
+                    label="New Password"
+                    value={newpassword}
+                    onChange={(e) => setNewpassword(e.target.value)}
+                  />
+                </div>
+                <div className="w-full sm:w-1/1">
+                  <NextTextInputField
+                    label="Confirm New Password"
+                    value={confirmnewpassword}
+                    onChange={(e) => setConfirmnewpassword(e.target.value)}
+                  />
+                </div>
+                {/* <TextInputField
                   label="Old Password"
                   id="oldpassword"
                   name="oldpassword"
@@ -156,8 +180,8 @@ const UpdatePassword = () => {
                   placeholder="Old Password"
                   value={oldpassword}
                   onChange={(e) => setOldpassword(e.target.value)}
-                />
-                <TextInputField
+                /> */}
+                {/* <TextInputField
                   label="New Password"
                   id="newpassword"
                   name="newpassword"
@@ -165,8 +189,8 @@ const UpdatePassword = () => {
                   placeholder="Task Description"
                   value={newpassword}
                   onChange={(e) => setNewpassword(e.target.value)}
-                />
-                <TextInputField
+                /> */}
+                {/* <TextInputField
                   label="Confirm New Password"
                   id="confirmnewpassword"
                   name="confirmnewpassword"
@@ -174,25 +198,35 @@ const UpdatePassword = () => {
                   placeholder="Confirm New Password"
                   value={confirmnewpassword}
                   onChange={(e) => setConfirmnewpassword(e.target.value)}
-                />
+                /> */}
               </div>
             </div>
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center mt-3">
               <div className="mr-3">
-                <button
+                <Button
+                  color="danger"
+                  variant="faded"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Close
+                </Button>
+                {/* <button
                   onClick={updateNewPassword}
                   className="rounded-lg bg-gradient-to-r from-green-500 to-green-600  hover:bg-gradient-to-l hover:from-green-500 hover:to-green-600 py-3 px-8 text-center text-base font-semibold text-white outline-none"
                 >
                   Update
-                </button>
+                </button> */}
               </div>
               <div>
-                <button
+                <Button color="primary" onClick={updateNewPassword}>
+                  Save
+                </Button>
+                {/* <button
                   onClick={() => setIsOpen(false)}
                   className="rounded-lg bg-gradient-to-r from-amber-500 to-amber-600  hover:bg-gradient-to-l hover:from-amber-500 hover:to-amber-600 py-3 px-8 text-center text-base font-semibold text-white outline-none"
                 >
                   Cancel
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

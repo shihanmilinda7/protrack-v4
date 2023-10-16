@@ -1,9 +1,5 @@
-import { StaffObj } from "@/app/components/staff/types";
-import { prisma } from "@/db";
-import { Prisma } from "@prisma/client";
-import { DefaultArgs } from "@prisma/client/runtime/library";
 import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
+import { getSearchProjectCount, getSearchProjectData } from "./project-db-api";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -25,31 +21,13 @@ export async function GET(request: Request) {
     searchProjectName = tmpSearchProjectName;
   }
   try {
-    await prisma.$transaction(async (tx) => {
-      totalProjectCount = await tx.projects.count({
-        where: {
-          projectname: {
-            contains: searchProjectName,
-          },
-        },
-      });
-
-      project = await tx.projects.findMany({
-        where: {
-          projectname: {
-            contains: searchProjectName,
-          },
-        },
-        skip: offset,
-        take: postsPerPage,
-      });
-      if (project.length > 0) {
-        res = { message: "SUCCESS", project, totalProjectCount };
-      } else {
-        res = { message: "FAIL", staff: [], totalStaffCount: 1 };
-      }
-      return "";
-    });
+    totalProjectCount = await getSearchProjectCount(searchProjectName);
+    project = await getSearchProjectData(
+      searchProjectName,
+      postsPerPage,
+      offset
+    );
+    res = { message: "SUCCESS", project, totalProjectCount };
   } catch (error) {
     console.log("error", error);
     res = { message: "FAIL" };

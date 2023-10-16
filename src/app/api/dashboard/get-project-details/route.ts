@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getProjectCount } from "../db-api";
+import { getAllProjectCount } from "../../project/project-db-api";
 
 export async function GET(request: Request) {
   let res;
@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   let totalProjectCount: any;
 
   try {
-    totalProjectCount = await getProjectCount();
+    totalProjectCount = await getAllProjectCount();
     res = { message: "SUCCESS", totalProjectCount };
   } catch (error) {
     console.log("error", error);

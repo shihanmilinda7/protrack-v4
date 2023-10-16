@@ -1,6 +1,5 @@
-import { prisma } from "@/db";
-import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { getStaffAssignProject } from "../../project-assign/projectassign-db-api";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -9,9 +8,7 @@ export async function GET(request: Request) {
   const staffid: any = searchParams.get("staffid");
 
   let project: any;
-
-  const rawQuery = Prisma.sql`select pa.projectid,p.projectname from projectassigns as pa join projects as p on pa.projectid = p.projectid where staffid = ${staffid}`;
-  project = await prisma.$queryRaw(rawQuery);
+  project = await getStaffAssignProject(staffid);
 
   if (project.length > 0) {
     res = { message: "SUCCESS", project };

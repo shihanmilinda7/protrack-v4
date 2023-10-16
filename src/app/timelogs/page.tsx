@@ -184,7 +184,6 @@ export default function Timelog() {
   };
 
   const fetchTimelogEvents = async () => {
-    console.log("staffid", staffid);
     const fetchData = async () => {
       const reponse = await fetch(
         pathname +

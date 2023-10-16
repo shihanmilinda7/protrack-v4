@@ -1,6 +1,9 @@
-import { prisma } from "@/db";
-import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { getSearchStaffCount, getSearchStaffData } from "../staff-db-api";
+import {
+  getStaffAssignProject,
+  getStaffAssignTask,
+} from "../../project-assign/projectassign-db-api";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -32,51 +35,34 @@ export async function GET(request: Request) {
     } else {
       searchDesignation = tmpSearchDesignation;
     }
-    // console.log("searchStaffName",searchStaffName,)
-    await prisma.$transaction(async (tx) => {
-      totalStaffCount = await tx.staff.count({
-        where: {
-          staffname: {
-            contains: searchStaffName,
-          },
-          designation: {
-            contains: searchDesignation,
-          },
-        },
-      });
 
-      staff = await tx.staff.findMany({
-        where: {
-          staffname: {
-            contains: searchStaffName,
-          },
-          designation: {
-            contains: searchDesignation,
-          },
-        },
-        skip: offset,
-        take: postsPerPage,
-      });
+    totalStaffCount = await getSearchStaffCount(
+      searchStaffName,
+      searchDesignation
+    );
+    staff = await getSearchStaffData(
+      searchStaffName,
+      searchDesignation,
+      postsPerPage,
+      offset
+    );
+    if (staff.length > 0) {
+      for (let index = 0; index < staff.length; index++) {
+        const element = staff[index];
 
-      // console.log(staff);
-      if (staff.length > 0) {
-        for (let index = 0; index < staff.length; index++) {
-          const element = staff[index];
-          const rawQuery = Prisma.sql`select pt.taskname from projecttasksassigns as pta join projecttasks as pt on pta.taskid = pt.taskid where pta.projectid = ${projectid} and pta.staffid = ${element.staffid}`;
-          const projectTasks: any = await tx.$queryRaw(rawQuery);
-          element["assigntasks"] = projectTasks;
+        const projectTasks: any = await getStaffAssignTask(
+          projectid,
+          element.staffid
+        );
+        element["assigntasks"] = projectTasks;
 
-          const rawQuery1 = Prisma.sql`select p.projectname from projectassigns as pa join projects as p on pa.projectid = p.projectid where pa.staffid = ${element.staffid}`;
-          const projects: any = await tx.$queryRaw(rawQuery1);
-          element["assignprojects"] = projects;
-        }
-        // console.log(staff);
-        res = { message: "SUCCESS", staff, totalStaffCount };
-      } else {
-        res = { message: "FAIL", staff: [], totalStaffCount: 1 };
+        const projects: any = await getStaffAssignProject(element.staffid);
+        element["assignprojects"] = projects;
       }
-      return "";
-    });
+      res = { message: "SUCCESS", staff, totalStaffCount };
+    } else {
+      res = { message: "FAIL", staff: [], totalStaffCount: 1 };
+    }
   } catch (error) {
     console.log("error", error);
     res = { message: "FAIL" };

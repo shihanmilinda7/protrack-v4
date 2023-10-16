@@ -133,7 +133,9 @@ export const TimelogTaskTable = ({
 
   const saveEvent = async () => {
     const filteredArray = timelogRows.filter(
-      (item) => item.projectid == "" || item.taskid == "" || item.time == 0
+      (item) =>
+        (item.projectid == "" || item.taskid == "" || item.time == 0) &&
+        (item.rowstatus != "r")
     );
     if (filteredArray.length == 0) {
       try {

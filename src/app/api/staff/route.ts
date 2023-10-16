@@ -6,7 +6,7 @@ import {
   getAllStaffData,
   newStaff,
   updateStaff,
-} from "./db-api";
+} from "./staff-db-api";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

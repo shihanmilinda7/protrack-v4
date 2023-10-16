@@ -1,4 +1,5 @@
 import { db } from "@/db";
+import bcrypt, { compare } from "bcryptjs";
 
 export const getAllStaffData = async (postsPerPage, offset) => {
   let rows;
@@ -63,7 +64,6 @@ export const newStaff = async (
           country,
           currentTimestamp.toISOString()
         );
-      console.log("staff", staff.lastInsertRowid);
 
       const query2 = `INSERT INTO users (staffid,
             username,
@@ -151,3 +151,94 @@ export const deleteStaff = async (staffid, userid) => {
   transaction();
   return rows;
 };
+
+export const usernameValidation = async (username, staffid) => {
+  let rows;
+  const transaction = db.transaction(() => {
+    try {
+      if (staffid == "0") {
+        const query = `SELECT * FROM users WHERE username = ?;`;
+        rows = db.prepare(query).all(username);
+      } else {
+        const query = `SELECT * FROM users WHERE staffid <> ? AND username = ?;`;
+        rows = db.prepare(query).all(staffid, username);
+      }
+    } catch (error) {
+      console.error("Transaction error:", error);
+    }
+  });
+  transaction();
+  return rows;
+};
+
+export const userValidation = async (userId) => {
+  let rows;
+  const transaction = db.transaction(() => {
+    try {
+      const query = `SELECT * FROM users WHERE userid = ?;`;
+      rows = db.prepare(query).all(userId);
+    } catch (error) {
+      console.error("Transaction error:", error);
+    }
+  });
+  transaction();
+  return rows;
+};
+
+export const updatePassword = async (hashedPassword, userId) => {
+  let rows;
+  const transaction = db.transaction(() => {
+    try {
+      const query = `UPDATE users SET password = ? WHERE userid = ?;`;
+
+      db.prepare(query).run(hashedPassword, userId);
+    } catch (error) {
+      console.error("Transaction error:", error);
+    }
+  });
+  transaction();
+  return rows;
+};
+
+export const getSearchStaffCount = async (
+  searchStaffName,
+  searchDesignation
+) => {
+  let rows;
+  const transaction = db.transaction(() => {
+    try {
+      const query = `SELECT COUNT(*) as count FROM staff WHERE staffname LIKE ? AND designation LIKE ?;`;
+
+      rows = db
+        .prepare(query)
+        .get(`%${searchStaffName}%`, `%${searchDesignation}%`);
+    } catch (error) {
+      console.error("Transaction error:", error);
+    }
+  });
+  transaction();
+  return rows.count;
+};
+
+export const getSearchStaffData = async (
+  searchStaffName,
+  searchDesignation,
+  postsPerPage,
+  offset
+) => {
+  let rows;
+  const transaction = db.transaction(() => {
+    try {
+      const query = `SELECT * FROM staff
+      WHERE staffname LIKE ? AND designation LIKE ?
+      LIMIT ${postsPerPage} OFFSET ${offset};`;
+
+      rows = db.prepare(query).all(`%${searchStaffName}%`, `%${searchDesignation}%`);
+    } catch (error) {
+      console.error("Transaction error:", error);
+    }
+  });
+  transaction();
+  return rows;
+};
+

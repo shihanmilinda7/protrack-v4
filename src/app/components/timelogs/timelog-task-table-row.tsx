@@ -105,7 +105,7 @@ export const TimelogTaskTableRow = ({
         projectid
     );
     const res = await reponse.json();
-    const modifiedAssignTasksData = res.projectTasks.map((p) => ({
+    const modifiedAssignTasksData = res.projectTasks?.map((p) => ({
       value: p.taskid,
       name: p.taskname,
     }));

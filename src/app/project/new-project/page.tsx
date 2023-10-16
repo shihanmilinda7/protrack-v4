@@ -24,6 +24,7 @@ import { useDispatch } from "react-redux";
 import { MdOutlineArrowBack } from "react-icons/md";
 import SearchFilter from "@/app/components/common-comp/input-fields/search-filter";
 import { FaSearch } from "react-icons/fa";
+import IconConfirmAlertbox from "@/app/components/common-comp/icon-confirm-alertbox";
 
 export default function NewProject() {
   //get pathname
@@ -318,6 +319,47 @@ export default function NewProject() {
     setTaskRowObjects(tmpArray);
   };
 
+  const deleteAction = async () => {
+    if (projectid) {
+      const responseDel = await fetch(
+        pathname + "/api/project/get-as-project",
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ projectid }),
+        }
+      );
+
+      const res = await responseDel.json();
+      if (res == "SUCCESS") {
+        toast.success("Project deleted successfully!", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        router.push("/project");
+      } else {
+        toast.error("Error!", {
+          position: "top-right",
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    } else {
+      router.push("/project");
+    }
+  };
+
   if (status === "loading") {
     return (
       <div>
@@ -471,13 +513,29 @@ export default function NewProject() {
               </div>
               {/* {JSON.stringify(taskRowObjects)} */}
               <div className="flex px-3 w-full mt-2">
-                <div className="ml-auto">
+                <div
+                  className={
+                    userRole == "User" || !projectid ? "hidden" : "ml-auto"
+                  }
+                >
+                  <IconConfirmAlertbox
+                    buttonName="Delete"
+                    leftButtonAction={deleteAction}
+                    description="Do you want to delete this record ?"
+                  />
+                </div>
+                <div
+                  className={
+                    userRole == "User" || !projectid ? "ml-auto" : "ml-3"
+                  }
+                >
                   <ConfirmAlertbox
                     buttonName="Cancel"
                     leftButtonAction={cancelButton}
                     description="Do you want cancel?"
                   />
                 </div>
+
                 <div className={userRole == "User" ? "hidden" : "ml-3"}>
                   <Button color="success" onClick={submitButtonHandler}>
                     Save

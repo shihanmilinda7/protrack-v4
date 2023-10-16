@@ -20,7 +20,7 @@ const NextSelectInputField = ({
       onChange={onChange}
       placeholder="Select here..."
     >
-      {optionValues.map((c) => (
+      {optionValues?.map((c) => (
         <SelectItem key={c.value} value={c.value}>
           {c.name}
         </SelectItem>

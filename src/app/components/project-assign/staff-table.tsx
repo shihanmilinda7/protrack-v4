@@ -148,7 +148,7 @@ export const PrjAssignStaffTable = ({
                 </td>
                 <td className="text-left py-3 px-2">
                   <span className="inline-block mr-2 last:mr-0 py-1 px-2 rounded-full bg-green-500 text-xs font-semibold text-white">
-                    {tableRow.assigntasks.length}
+                    {tableRow.assigntasks?.length}
                   </span>
                   <span>
                     {tableRow.assigntasks
@@ -160,7 +160,7 @@ export const PrjAssignStaffTable = ({
                 </td>
                 <td className="text-left py-3 px-2">
                   <span className="inline-block mr-2 last:mr-0 py-1 px-2 rounded-full bg-blue-500 text-xs font-semibold text-white">
-                    {tableRow.assignprojects.length}
+                    {tableRow.assignprojects?.length}
                   </span>
                   <span>
                     {tableRow.assignprojects

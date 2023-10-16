@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAllStaffCount } from "../../staff/db-api";
+import { getAllStaffCount } from "../../staff/staff-db-api";
 
 export async function GET(request: Request) {
   let res;
